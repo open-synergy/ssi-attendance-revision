@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2024 OpenSynergy Indonesia
+     Copyright 2024 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+<record id="attendance_revision_view_search" model="ir.ui.view">
+    <field name="name">attendance_revision - search</field>
+    <field name="model">attendance_revision</field>
+    <field
+            name="inherit_id"
+            ref="ssi_transaction_mixin.mixin_transaction_view_search"
+        />
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='company_id']" position="after">
+                <field name="employee_id" />
+                <field name="department_id" />
+                <field name="manager_id" />
+                <field name="job_id" />
+                <field name="date" />
+                <field name="type_id" />
+                <field name="reason_id" />
+                <field name="timesheet_id" />
+            </xpath>
+            <xpath expr="//filter[@name='grp_responsible']" position="after">
+                <filter
+                        name="grp_employee_id"
+                        string="Employee"
+                        context="{'group_by':'employee_id'}"
+                    />
+                <filter
+                        name="grp_department_id"
+                        string="Department"
+                        context="{'group_by':'department_id'}"
+                    />
+                <filter name="grp_date" string="Date" context="{'group_by':'date'}" />
+                <filter
+                        name="grp_type_id"
+                        string="Type"
+                        context="{'group_by':'type_id'}"
+                    />
+                <filter
+                        name="grp_reason_id"
+                        string="Reason"
+                        context="{'group_by':'reason_id'}"
+                    />
+                <filter
+                        name="grp_timesheet_id"
+                        string="Timesheet"
+                        context="{'group_by':'timesheet_id'}"
+                    />
+            </xpath>
+        </data>
+    </field>
+</record>
+
+<record id="attendance_revision_view_tree" model="ir.ui.view">
+    <field name="name">attendance_revision - tree</field>
+    <field name="model">attendance_revision</field>
+    <field name="inherit_id" ref="ssi_transaction_mixin.mixin_transaction_view_tree" />
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="employee_id" />
+                <field name="department_id" optional="hide" />
+                <field
+                        name="manager_id"
+                        widget="many2one_avatar_employee"
+                        optional="hide"
+                    />
+                <field name="job_id" optional="hide" />
+                <field name="type_id" />
+                <field name="reason_id" optional="show" />
+                <field name="timesheet_id" />
+                <field name="date" />
+            </xpath>
+        </data>
+    </field>
+</record>
+
+<record id="attendance_revision_view_form" model="ir.ui.view">
+    <field name="name">attendance_revision - form</field>
+    <field name="model">attendance_revision</field>
+    <field name="inherit_id" ref="ssi_transaction_mixin.mixin_transaction_view_form" />
+    <field name="mode">primary</field>
+    <field name="arch" type="xml">
+        <data>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="employee_id" />
+                <field name="department_id" readonly="1" force_save="1" />
+                <field
+                        name="manager_id"
+                        widget="many2one_avatar_employee"
+                        readonly="1"
+                        force_save="1"
+                    />
+                <field name="job_id" readonly="1" force_save="1" />
+            </xpath>
+            <xpath expr="//group[@name='header_right']" position="inside">
+                <field name="date" />
+                <field name="type_id" />
+                <field
+                        name="allowed_reason_ids"
+                        widget="many2many_tags"
+                        invisible="1"
+                    />
+                <field name="reason_id" domain="[('id', 'in', allowed_reason_ids)]" />
+                <field
+                        name="allowed_timesheet_ids"
+                        widget="many2many_tags"
+                        invisible="1"
+                    />
+                <field
+                        name="timesheet_id"
+                        domain="[('id', 'in', allowed_timesheet_ids)]"
+                    />
+            </xpath>
+            <xpath expr="//page[1]" position="before">
+                <page name="detail" string="Details">
+                    <button
+                            name="action_reload_schedule"
+                            type="object"
+                            string="Reload from Timesheet"
+                            icon="fa-refresh"
+                            class="oe_highlight"
+                            states="draft"
+                        />
+                    <field name="detail_ids">
+                        <tree editable="top" create="false" delete="false">
+                            <field name="attendance_schedule_id" invisible="1" />
+                            <field name="schedule_date_start" />
+                            <field name="schedule_date_end" />
+                            <field name="original_date_start" />
+                            <field name="original_date_end" />
+                            <field name="actual_date_start" />
+                            <field name="actual_date_end" />
+                        </tree>
+                        <form>
+                            <group name="detail_1" colspan="4" col="2">
+                                <group name="detail_1_1" colspan="1" col="2">
+                                    <field
+                                            name="attendance_schedule_id"
+                                            invisible="1"
+                                        />
+                                    <field name="schedule_date_start" />
+                                    <field name="schedule_date_end" />
+                                    <field name="original_date_start" />
+                                    <field name="original_date_end" />
+                                </group>
+                                <group name="detail_1_2" colspan="1" col="2">
+                                    <field name="actual_date_start" />
+                                    <field name="actual_date_end" />
+                                </group>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+        </data>
+    </field>
+</record>
+
+<record id="attendance_revision_action" model="ir.actions.act_window">
+    <field name="name">Attendance Revision</field>
+    <field name="res_model">attendance_revision</field>
+    <field name="view_mode">tree,form</field>
+</record>
+
+<menuitem
+        id="attendance_revision_menu"
+        parent="ssi_timesheet.timesheet_menu"
+        action="attendance_revision_action"
+        sequence="20"
+    />
+
+</odoo>

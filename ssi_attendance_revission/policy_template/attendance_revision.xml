@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2024 OpenSynergy Indonesia
+     Copyright 2024 PT. Simetri Sinergi Indonesia
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+<data noupdate="1">
+<record id="attendance_revision_policy_template" model="policy.template">
+    <field name="name">Standard</field>
+    <field name="model_id" ref="model_attendance_revision" />
+    <field
+                name="state_field_id"
+                search="[('model_id.model','=','attendance_revision'),('name','=','state')]"
+            />
+    <field name="sequence" eval="100" />
+    <field name="python_code">result=True</field>
+</record>
+
+<record
+            id="attendance_revision_policy_template_detail_confirm"
+            model="policy.template_detail"
+        >
+    <field name="template_id" ref="attendance_revision_policy_template" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','attendance_revision'),('name','=','confirm_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','attendance_revision'),('value','=','draft')]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field name="group_ids" eval="[(6,0,[ref('attendance_revision_user_group')])]" />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+<record
+            id="attendance_revision_policy_template_detail_approve"
+            model="policy.template_detail"
+        >
+    <field name="template_id" ref="attendance_revision_policy_template" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','attendance_revision'),('name','=','approve_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','attendance_revision'),('value','=','confirm')]"
+            />
+    <field name="restrict_user" eval="0" />
+    <field name="restrict_additional" eval="1" />
+    <field name="additional_python_code">result = False
+if env.user.id in document.active_approver_user_ids.ids:
+    result = True</field>
+</record>
+
+<record
+            id="attendance_revision_policy_template_detail_reject"
+            model="policy.template_detail"
+        >
+    <field name="template_id" ref="attendance_revision_policy_template" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','attendance_revision'),('name','=','reject_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','attendance_revision'),('value','=','confirm')]"
+            />
+    <field name="restrict_user" eval="0" />
+    <field name="restrict_additional" eval="1" />
+    <field name="additional_python_code">result = False
+if env.user.id in document.active_approver_user_ids.ids:
+    result = True</field>
+</record>
+
+<record
+            id="attendance_revision_policy_template_detail_restart_approval"
+            model="policy.template_detail"
+        >
+    <field name="template_id" ref="attendance_revision_policy_template" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','attendance_revision'),('name','=','restart_approval_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','attendance_revision'),('value','=','reject')]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field name="group_ids" eval="[(6,0,[ref('attendance_revision_user_group')])]" />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+<record
+            id="attendance_revision_policy_template_detail_cancel"
+            model="policy.template_detail"
+        >
+    <field name="template_id" ref="attendance_revision_policy_template" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','attendance_revision'),('name','=','cancel_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','attendance_revision'),('value','in',['draft','confirm'])]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field name="group_ids" eval="[(6,0,[ref('attendance_revision_user_group')])]" />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+<record
+            id="attendance_revision_policy_template_detail_restart"
+            model="policy.template_detail"
+        >
+    <field name="template_id" ref="attendance_revision_policy_template" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','attendance_revision'),('name','=','restart_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','attendance_revision'),('value','=','cancel')]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field name="group_ids" eval="[(6,0,[ref('attendance_revision_user_group')])]" />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+<record
+            id="attendance_revision_policy_template_detail_manual_number"
+            model="policy.template_detail"
+        >
+    <field name="template_id" ref="attendance_revision_policy_template" />
+    <field
+                name="field_id"
+                search="[('model_id.model','=','attendance_revision'),('name','=','manual_number_ok')]"
+            />
+    <field name="restrict_state" eval="1" />
+    <field
+                name="state_ids"
+                search="[('field_id.model_id.model','=','attendance_revision'),('value','=','draft')]"
+            />
+    <field name="restrict_user" eval="1" />
+    <field name="computation_method">use_group</field>
+    <field name="group_ids" eval="[(6,0,[ref('attendance_revision_user_group')])]" />
+    <field name="restrict_additional" eval="0" />
+</record>
+
+</data>
+</odoo>
