@@ -21,7 +21,7 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
-[ssi_attendance_revission](ssi_attendance_revission/) | 14.0.1.0.0 |  | Attendance Revision
+[ssi_attendance_revission](ssi_attendance_revission/) | 14.0.1.1.0 |  | Attendance Revision
 
 [//]: # (end addons)
 
