@@ -1,0 +1,118 @@
+scenarios:
+  - name: "Attendance Revision - Full workflow test"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee AR"
+
+      - step: "Create hr.timesheet in draft"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          date_start: "2024-01-01"
+          date_end: "2024-01-31"
+          working_schedule_id: "REF: resource.resource_calendar_std"
+
+      - step: "Open the timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+
+      - step: "Invalidate cache after open"
+        action: "call"
+        target: "timesheet"
+        method: "invalidate_cache"
+
+      - step: "Assert timesheet is open"
+        action: "assert"
+        target: "timesheet"
+        asserts:
+          state:
+            type: "value"
+            expected: "open"
+
+      - step: "Create attendance revision type"
+        action: "create"
+        model: "attendance_revision_type"
+        save_as: "revision_type"
+        values:
+          name: "Test Type AR"
+          code: "TTAR001"
+          reason_selection_method: "domain"
+          reason_domain: "[]"
+
+      - step: "Create attendance revision reason"
+        action: "create"
+        model: "attendance_revision_reason"
+        save_as: "revision_reason"
+        values:
+          name: "Test Reason"
+          code: "TRAR001"
+
+      - step: "Create attendance revision"
+        action: "create"
+        model: "attendance_revision"
+        save_as: "revision"
+        values:
+          employee_id: "EVAL: registry['employee'].id"
+          type_id: "EVAL: registry['revision_type'].id"
+          timesheet_id: "EVAL: registry['timesheet'].id"
+          date: "2024-01-15"
+
+      - step: "Assert revision created in draft"
+        action: "assert"
+        target: "revision"
+        asserts:
+          state:
+            type: "value"
+            expected: "draft"
+
+      - step: "Confirm attendance revision"
+        action: "call"
+        target: "revision"
+        method: "action_confirm"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+
+      - step: "Invalidate cache after confirm"
+        action: "call"
+        target: "revision"
+        method: "invalidate_cache"
+
+      - step: "Assert revision is in confirm state"
+        action: "assert"
+        target: "revision"
+        asserts:
+          state:
+            type: "value"
+            expected: "confirm"
+
+      - step: "Approve attendance revision"
+        action: "call"
+        target: "revision"
+        method: "action_approve_approval"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+
+      - step: "Invalidate cache after approve"
+        action: "call"
+        target: "revision"
+        method: "invalidate_cache"
+
+      - step: "Assert revision is done"
+        action: "assert"
+        target: "revision"
+        asserts:
+          state:
+            type: "value"
+            expected: "done"
