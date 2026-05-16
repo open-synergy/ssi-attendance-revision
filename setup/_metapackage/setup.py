@@ -8,6 +8,7 @@ setuptools.setup(
     description="Meta package for open-synergy-ssi-attendance-revision Odoo addons",
     version=version,
     install_requires=[
+        'odoo14-addon-ssi_attendance_revision_operating_unit',
         'odoo14-addon-ssi_attendance_revission',
     ],
     classifiers=[
