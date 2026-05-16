@@ -1,0 +1,110 @@
+scenarios:
+  - name: "Attendance Revision Type - Create master data with domain selection"
+    steps:
+      - step: "Create attendance revision type with domain selection"
+        action: "create"
+        model: "attendance_revision_type"
+        save_as: "revision_type"
+        values:
+          name: "Test Revision Type Domain"
+          code: "TRTD001"
+          reason_selection_method: "domain"
+          reason_domain: "[]"
+
+      - step: "Assert type created"
+        action: "assert"
+        target: "revision_type"
+        asserts:
+          name:
+            type: "value"
+            expected: "Test Revision Type Domain"
+          code:
+            type: "value"
+            expected: "TRTD001"
+          reason_selection_method:
+            type: "value"
+            expected: "domain"
+          active:
+            type: "value"
+            expected: true
+
+      - step: "Create attendance revision reason 1"
+        action: "create"
+        model: "attendance_revision_reason"
+        save_as: "reason1"
+        values:
+          name: "Late Arrival"
+          code: "LA001"
+
+      - step: "Assert reason 1 created"
+        action: "assert"
+        target: "reason1"
+        asserts:
+          name:
+            type: "value"
+            expected: "Late Arrival"
+          active:
+            type: "value"
+            expected: true
+
+      - step: "Create attendance revision reason 2"
+        action: "create"
+        model: "attendance_revision_reason"
+        save_as: "reason2"
+        values:
+          name: "Early Departure"
+          code: "ED001"
+
+      - step: "Update type to manual selection"
+        action: "write"
+        target: "revision_type"
+        values:
+          reason_selection_method: "manual"
+
+      - step: "Assert type updated"
+        action: "assert"
+        target: "revision_type"
+        asserts:
+          reason_selection_method:
+            type: "value"
+            expected: "manual"
+
+  - name: "Attendance Revision Type - Create with manual reason list"
+    steps:
+      - step: "Create type with manual selection"
+        action: "create"
+        model: "attendance_revision_type"
+        save_as: "type_manual"
+        values:
+          name: "Manual Selection Type"
+          code: "TRTM001"
+          reason_selection_method: "manual"
+
+      - step: "Assert type created"
+        action: "assert"
+        target: "type_manual"
+        asserts:
+          name:
+            type: "value"
+            expected: "Manual Selection Type"
+          reason_selection_method:
+            type: "value"
+            expected: "manual"
+
+      - step: "Create type with python code selection"
+        action: "create"
+        model: "attendance_revision_type"
+        save_as: "type_code"
+        values:
+          name: "Python Code Type"
+          code: "TRTC001"
+          reason_selection_method: "code"
+          reason_python_code: "result = []"
+
+      - step: "Assert code type created"
+        action: "assert"
+        target: "type_code"
+        asserts:
+          reason_selection_method:
+            type: "value"
+            expected: "code"
