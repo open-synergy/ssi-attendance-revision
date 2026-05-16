@@ -10,6 +10,7 @@ setuptools.setup(
     install_requires=[
         'odoo14-addon-ssi_attendance_revision_operating_unit',
         'odoo14-addon-ssi_attendance_revission',
+        'odoo14-addon-ssi_attendance_revission_documenso_signing',
     ],
     classifiers=[
         'Programming Language :: Python',
