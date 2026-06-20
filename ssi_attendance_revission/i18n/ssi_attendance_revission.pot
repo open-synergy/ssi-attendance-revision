@@ -356,6 +356,7 @@ msgstr ""
 
 #. module: ssi_attendance_revission
 #: model:ir.model.fields.selection,name:ssi_attendance_revission.selection__attendance_revision_type__reason_selection_method__domain
+#: model_terms:ir.ui.view,arch_db:ssi_attendance_revission.attendance_revision_type_view_search
 msgid "Domain"
 msgstr ""
 
@@ -411,6 +412,11 @@ msgstr ""
 #: model:ir.model.fields,help:ssi_attendance_revission.field_attendance_revision_reason__activity_type_icon
 #: model:ir.model.fields,help:ssi_attendance_revission.field_attendance_revision_type__activity_type_icon
 msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: ssi_attendance_revission
+#: model_terms:ir.ui.view,arch_db:ssi_attendance_revission.attendance_revision_type_view_search
+msgid "Group By"
 msgstr ""
 
 #. module: ssi_attendance_revission
@@ -526,6 +532,7 @@ msgstr ""
 
 #. module: ssi_attendance_revission
 #: model:ir.model.fields.selection,name:ssi_attendance_revission.selection__attendance_revision_type__reason_selection_method__manual
+#: model_terms:ir.ui.view,arch_db:ssi_attendance_revission.attendance_revision_type_view_search
 msgid "Manual"
 msgstr ""
 
@@ -705,6 +712,7 @@ msgstr ""
 
 #. module: ssi_attendance_revission
 #: model:ir.model.fields.selection,name:ssi_attendance_revission.selection__attendance_revision_type__reason_selection_method__code
+#: model_terms:ir.ui.view,arch_db:ssi_attendance_revission.attendance_revision_type_view_search
 msgid "Python Code"
 msgstr ""
 
@@ -738,6 +746,7 @@ msgstr ""
 
 #. module: ssi_attendance_revission
 #: model:ir.model.fields,field_description:ssi_attendance_revission.field_attendance_revision_type__reason_selection_method
+#: model_terms:ir.ui.view,arch_db:ssi_attendance_revission.attendance_revision_type_view_search
 msgid "Reason Selection Method"
 msgstr ""
 
