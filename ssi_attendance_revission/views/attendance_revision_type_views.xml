@@ -12,7 +12,36 @@
         />
     <field name="mode">primary</field>
     <field name="arch" type="xml">
-        <data />
+        <data>
+            <xpath expr="//field[@name='code']" position="after">
+                <field name="reason_selection_method" />
+            </xpath>
+            <xpath expr="//group[@name='dom_active']" position="after">
+                <separator />
+                <filter
+                        name="dom_selection_manual"
+                        string="Manual"
+                        domain="[('reason_selection_method', '=', 'manual')]"
+                    />
+                <filter
+                        name="dom_selection_domain"
+                        string="Domain"
+                        domain="[('reason_selection_method', '=', 'domain')]"
+                    />
+                <filter
+                        name="dom_selection_code"
+                        string="Python Code"
+                        domain="[('reason_selection_method', '=', 'code')]"
+                    />
+                <group expand="0" string="Group By">
+                    <filter
+                            name="grp_reason_selection_method"
+                            string="Reason Selection Method"
+                            context="{'group_by': 'reason_selection_method'}"
+                        />
+                </group>
+            </xpath>
+        </data>
     </field>
 </record>
 
