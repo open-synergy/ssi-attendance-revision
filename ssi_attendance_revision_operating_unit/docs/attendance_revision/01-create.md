@@ -1,7 +1,8 @@
 # Create Attendance Revision
 
-> **Module:** ssi_attendance_revision_operating_unit **Extends:**
-> ssi_attendance_revission — model `attendance_revision`, aksi `01-create`
+> **Module:** ssi_attendance_revision_operating_unit
+>
+> **Extends:** ssi_attendance_revission — model `attendance_revision`, aksi `01-create`
 
 ## Additional Fields
 
