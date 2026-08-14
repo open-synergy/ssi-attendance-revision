@@ -10,6 +10,12 @@ Glue module that adds Documenso digital signing support to the Attendance
 Revision document via ``mixin.documenso_signing_approval``.
 
 
+Work Instruction
+================
+
+* `Attendance Revision <docs/attendance_revision/index.html>`_
+
+
 Bug Tracker
 ===========
 
