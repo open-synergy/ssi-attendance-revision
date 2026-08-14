@@ -23,7 +23,7 @@ addon | version | maintainers | summary
 --- | --- | --- | ---
 [ssi_attendance_revision_operating_unit](ssi_attendance_revision_operating_unit/) | 14.0.1.0.1 |  | Attendance Revision + Operating Unit
 [ssi_attendance_revission](ssi_attendance_revission/) | 14.0.1.2.1 |  | Attendance Revision
-[ssi_attendance_revission_documenso_signing](ssi_attendance_revission_documenso_signing/) | 14.0.1.0.0 |  | Attendance Revision - Documenso Signing Integration
+[ssi_attendance_revission_documenso_signing](ssi_attendance_revission_documenso_signing/) | 14.0.1.0.1 |  | Attendance Revision - Documenso Signing Integration
 
 [//]: # (end addons)
 
