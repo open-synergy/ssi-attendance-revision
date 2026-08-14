@@ -1003,3 +1003,17 @@ msgstr ""
 #: model:res.groups,name:ssi_attendance_revission.attendance_revision_viewer_group
 msgid "Viewer"
 msgstr ""
+
+#. module: ssi_attendance_revission
+#: model:ir.model.fields,field_description:ssi_attendance_revission.field_attendance_revision__website_message_ids
+#: model:ir.model.fields,field_description:ssi_attendance_revission.field_attendance_revision_reason__website_message_ids
+#: model:ir.model.fields,field_description:ssi_attendance_revission.field_attendance_revision_type__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: ssi_attendance_revission
+#: model:ir.model.fields,help:ssi_attendance_revission.field_attendance_revision__website_message_ids
+#: model:ir.model.fields,help:ssi_attendance_revission.field_attendance_revision_reason__website_message_ids
+#: model:ir.model.fields,help:ssi_attendance_revission.field_attendance_revision_type__website_message_ids
+msgid "Website communication history"
+msgstr ""
