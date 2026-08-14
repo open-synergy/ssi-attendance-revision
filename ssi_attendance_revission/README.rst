@@ -18,6 +18,28 @@ from the originally recorded attendance schedule.
 .. contents::
    :local:
 
+Work Instruction
+================
+
+* `Create Attendance Revision <docs/attendance_revision/index.html>`_
+* `Edit Attendance Revision <docs/attendance_revision/index.html>`_
+* `Delete Attendance Revision <docs/attendance_revision/index.html>`_
+* `Confirm Attendance Revision <docs/attendance_revision/index.html>`_
+* `Approve Attendance Revision <docs/attendance_revision/index.html>`_
+* `Reject Attendance Revision <docs/attendance_revision/index.html>`_
+* `Cancel Attendance Revision <docs/attendance_revision/index.html>`_
+* `Restart Attendance Revision <docs/attendance_revision/index.html>`_
+* `Create Attendance Revision Type <docs/attendance_revision_type/index.html>`_
+* `Edit Attendance Revision Type <docs/attendance_revision_type/index.html>`_
+* `Delete Attendance Revision Type <docs/attendance_revision_type/index.html>`_
+* `Deactivate Attendance Revision Type <docs/attendance_revision_type/index.html>`_
+* `Activate Attendance Revision Type <docs/attendance_revision_type/index.html>`_
+* `Create Attendance Revision Reason <docs/attendance_revision_reason/index.html>`_
+* `Edit Attendance Revision Reason <docs/attendance_revision_reason/index.html>`_
+* `Delete Attendance Revision Reason <docs/attendance_revision_reason/index.html>`_
+* `Deactivate Attendance Revision Reason <docs/attendance_revision_reason/index.html>`_
+* `Activate Attendance Revision Reason <docs/attendance_revision_reason/index.html>`_
+
 Bug Tracker
 ===========
 

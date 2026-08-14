@@ -3,3 +3,6 @@
 
 from . import test_attendance_revision_type
 from . import test_attendance_revision
+from . import test_ui_attendance_revision_type
+from . import test_ui_attendance_revision_reason
+from . import test_ui_attendance_revision
