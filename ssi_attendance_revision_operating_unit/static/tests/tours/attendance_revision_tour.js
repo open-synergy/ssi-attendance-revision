@@ -81,8 +81,31 @@ odoo.define(
 
                 // Delta assertion — the field can be filled in. It starts
                 // pre-filled with the user's default operating unit
-                // (mixin.single_operating_unit default), so this also
-                // proves the value can be changed, not just displayed.
+                // (mixin.single_operating_unit default, admin ships with
+                // one via operating_unit's own data/ — always loaded, not
+                // demo), so typing over it and picking a different,
+                // fixture-only record from the dropdown also proves the
+                // value can be CHANGED, not just displayed.
+                //
+                // There is deliberately NO further step asserting the
+                // resulting text. In 14.0 (Sizzle,
+                // web/static/lib/jquery/jquery.js) the attribute selector
+                // "input[value=...]" reads elem.defaultValue — the
+                // original HTML attribute — never the live elem.value the
+                // many2one widget sets via $input.val() in _renderEdit(),
+                // so such a trigger would NEVER match even though the
+                // value is right there on screen (odoo-development-ui-test
+                // skill, patterns.md §L). The widget also offers no other
+                // attribute/text-node carrying the live value while the
+                // form stays in edit mode (unsaved) — the skill's own fix,
+                // closing and reopening the record read-only, does not
+                // apply here since this delta tour never saves. The click
+                // below succeeding on a real, name_search-matched dropdown
+                // item (it does not exist unless our fixture record is
+                // found) is itself the proof that the field accepts input,
+                // exactly like the base create tour's other many2one
+                // fields (Employee/Type/Reason/# Timesheet), which do not
+                // assert a post-pick value either.
                 {
                     content: "Fill in the Operating Unit",
                     trigger: ".o_field_many2one[name='operating_unit_id'] input",
@@ -92,14 +115,6 @@ odoo.define(
                     content: "Pick the Operating Unit from the dropdown",
                     trigger: ".ui-autocomplete .ui-menu-item a:contains(TOUR AR OU)",
                     in_modal: false,
-                },
-                {
-                    content: "Operating Unit is filled in",
-                    trigger:
-                        ".o_field_many2one[name='operating_unit_id'] input[value='TOUR AR OU']",
-                    run: function () {
-                        // Assertion only.
-                    },
                 },
             ]
         );
