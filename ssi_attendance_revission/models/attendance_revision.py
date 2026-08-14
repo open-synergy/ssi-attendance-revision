@@ -99,6 +99,12 @@ class AttendanceRevision(models.Model):
 
     @api.depends("type_id")
     def _compute_allowed_reason_ids(self):
+        """Restrict selectable reasons to those allowed by ``type_id``.
+
+        Delegates to the M2O Configurator helper on the selected
+        ``attendance_revision_type``, using whichever selection method
+        (manual list, domain, or Python code) that type defines.
+        """
         for record in self:
             result = False
             if record.type_id:
@@ -137,6 +143,12 @@ class AttendanceRevision(models.Model):
 
     @api.depends("employee_id")
     def _compute_allowed_timesheet_ids(self):
+        """Restrict selectable timesheets to open ones of ``employee_id``.
+
+        Only ``hr.timesheet`` records in state ``open`` belonging to the
+        selected employee are offered, since a revision must attach to a
+        timesheet that is still being worked on.
+        """
         Timesheet = self.env["hr.timesheet"]
         for record in self:
             result = []
@@ -217,6 +229,15 @@ class AttendanceRevision(models.Model):
         self.reason_id = False
 
     def action_reload_schedule(self):
+        """Rebuild ``detail_ids`` from ``timesheet_id``'s schedule lines.
+
+        Only applies to records still in state ``draft``. Existing detail
+        lines are discarded and replaced with one new line per
+        ``hr.timesheet_attendance_schedule`` entry found on the linked
+        timesheet, each pre-filled from that schedule's current values
+        (see ``_prepare_detail_data``). Inline action, invoked from the
+        create and edit Instruction Kerja of this model.
+        """
         for rec in self.sudo().filtered(lambda s: s.state == "draft"):
             rec.detail_ids = False
             line_vals = []
@@ -231,6 +252,16 @@ class AttendanceRevision(models.Model):
             rec.detail_ids = line_vals
 
     def _prepare_detail_data(self, schedule):
+        """Build the ``attendance_revision.detail`` values for ``schedule``.
+
+        Extension point: override to change which fields are copied from
+        the source ``hr.timesheet_attendance_schedule`` when
+        ``action_reload_schedule`` (re)builds ``detail_ids``.
+
+        :param schedule: the source ``hr.timesheet_attendance_schedule``
+            record being copied into a new detail line
+        :return: dict of ``attendance_revision.detail`` values
+        """
         return {
             "attendance_revision_id": self.id,
             "attendance_schedule_id": schedule.id,

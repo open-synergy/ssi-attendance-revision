@@ -26,14 +26,10 @@ scenarios:
         context:
           bypass_policy_check: true
 
-      - step: "Invalidate cache after open"
-        action: "call"
-        target: "timesheet"
-        method: "invalidate_cache"
-
       - step: "Assert timesheet is open"
         action: "assert"
         target: "timesheet"
+        refresh: true
         asserts:
           state:
             type: "value"
@@ -83,14 +79,10 @@ scenarios:
         context:
           bypass_policy_check: true
 
-      - step: "Invalidate cache after confirm"
-        action: "call"
-        target: "revision"
-        method: "invalidate_cache"
-
       - step: "Assert revision is in confirm state"
         action: "assert"
         target: "revision"
+        refresh: true
         asserts:
           state:
             type: "value"
@@ -104,14 +96,10 @@ scenarios:
         context:
           bypass_policy_check: true
 
-      - step: "Invalidate cache after approve"
-        action: "call"
-        target: "revision"
-        method: "invalidate_cache"
-
       - step: "Assert revision is done"
         action: "assert"
         target: "revision"
+        refresh: true
         asserts:
           state:
             type: "value"

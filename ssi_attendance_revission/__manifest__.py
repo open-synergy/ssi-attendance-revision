@@ -21,6 +21,7 @@
         "ssi_transaction_done_mixin",
         "ssi_transaction_cancel_mixin",
         "ssi_m2o_configurator_mixin",
+        "web_tour",
     ],
     "data": [
         "security/ir_module_category/attendance_revision.xml",
@@ -39,5 +40,6 @@
         "views/attendance_revision_type_views.xml",
         "views/attendance_revision_reason_views.xml",
         "views/attendance_revision_views.xml",
+        "views/assets.xml",
     ],
 }

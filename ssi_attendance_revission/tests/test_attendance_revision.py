@@ -9,5 +9,8 @@ from odoo.tests import tagged
 
 @tagged("post_install", "-at_install")
 class TestAttendanceRevision(YamlTransactionCase):
+    """Cover the ``attendance_revision`` full workflow scenario."""
+
     def test_attendance_revision(self):
+        """Run the draft-confirm-approve-done workflow scenario."""
         self.run_yaml_scenario("test_data_attendance_revision.yaml")

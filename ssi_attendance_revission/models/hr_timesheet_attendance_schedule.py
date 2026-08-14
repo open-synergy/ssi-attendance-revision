@@ -20,6 +20,12 @@ class HrTimesheetAttendanceSchedule(models.Model):
         "revision_detail_ids.attendance_revision_id.state",
     )
     def _compute_latest_revision_detail_id(self):
+        """Resolve the newest done-revision detail for this schedule.
+
+        Searches ``attendance_revision.detail`` for lines that reference
+        this schedule and belong to an ``attendance_revision`` already in
+        state ``done``, keeping the most recently created one.
+        """
         Detail = self.env["attendance_revision.detail"]
         for record in self:
             result = False
@@ -78,6 +84,14 @@ class HrTimesheetAttendanceSchedule(models.Model):
         "latest_revision_detail_id.actual_date_end",
     )
     def _compute_attendance(self):
+        """Override real check-in/out and hours with the latest revision.
+
+        Calls ``super()`` to keep the base computation first, then, for
+        schedules that have a done revision (``latest_revision_detail_id``
+        set), replaces ``real_date_start``/``real_date_end`` with the
+        revised datetimes and recomputes ``real_work_hour`` and
+        ``real_valid_hour`` from that revised range.
+        """
         super(HrTimesheetAttendanceSchedule, self)._compute_attendance()
         for schedule in self.filtered(lambda s: s.latest_revision_detail_id):
             if schedule.revision_date_start:
