@@ -9,5 +9,8 @@ from odoo.tests import tagged
 
 @tagged("post_install", "-at_install")
 class TestAttendanceRevisionOperatingUnit(YamlTransactionCase):
+    """Test the ``operating_unit_id`` field on ``attendance_revision``."""
+
     def test_attendance_revision_operating_unit(self):
+        """Run the operating unit scenario for ``attendance_revision``."""
         self.run_yaml_scenario("test_data_attendance_revision_operating_unit.yaml")

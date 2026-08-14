@@ -14,10 +14,12 @@
     "depends": [
         "ssi_attendance_revission",
         "ssi_operating_unit_mixin",
+        "web_tour",
     ],
     "data": [
         "security/res_group/attendance_revision.xml",
         "security/ir_rule/attendance_revision.xml",
         "views/attendance_revision_views.xml",
+        "views/assets.xml",
     ],
 }
