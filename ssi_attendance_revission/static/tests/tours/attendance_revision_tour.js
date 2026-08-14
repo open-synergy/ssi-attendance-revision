@@ -95,16 +95,22 @@ odoo.define("ssi_attendance_revission.attendance_revision_tour", function (requi
                 in_modal: false,
             },
             {
-                // Allowed_timesheet_ids narrows this down to the single open
-                // timesheet fixture belonging to the selected Employee, so
-                // there is exactly one candidate to pick without typing text
-                // (the timesheet's own document number is still "/").
-                content: "Open the # Timesheet dropdown",
+                // The fixture timesheet has an explicit manual document
+                // number (not the default "/"), so it can be searched by
+                // name like any other many2one — relying on domain
+                // uniqueness plus a blind click on the first autocomplete
+                // result is unsafe: a race between the employee_id
+                // onchange (which recomputes allowed_timesheet_ids) and
+                // opening the dropdown can leave the result list stale,
+                // and an unfiltered click can land on the "Create ..."
+                // quick-create option instead of the real record.
+                content: "Select the # Timesheet",
                 trigger: ".o_field_many2one[name='timesheet_id'] input",
+                run: "text TOUR-AR-TS-CREATE",
             },
             {
-                content: "Pick the only allowed Timesheet",
-                trigger: ".ui-autocomplete .ui-menu-item a",
+                content: "Pick the Timesheet from the dropdown",
+                trigger: ".ui-autocomplete .ui-menu-item a:contains(TOUR-AR-TS-CREATE)",
                 in_modal: false,
             },
 
@@ -132,10 +138,14 @@ odoo.define("ssi_attendance_revission.attendance_revision_tour", function (requi
             },
 
             // Flow 5 — Fill in Actual Date Start/End on the reloaded line.
+            // 14.0 list cells carry NO `name` attribute until the row is
+            // activated into edit mode (only <th> headers have
+            // data-name) — click any cell of the row first, matching
+            // patterns.md §C ("...SO/2026/001) .o_data_cell:first").
             {
                 content: "Open the first detail line for editing",
                 trigger:
-                    ".o_field_x2many[name='detail_ids'] .o_data_row:first .o_data_cell[name='actual_date_start']",
+                    ".o_field_x2many[name='detail_ids'] .o_data_row:first .o_data_cell:first",
             },
             {
                 content: "Fill in Actual Date Start",
@@ -234,10 +244,14 @@ odoo.define("ssi_attendance_revission.attendance_revision_tour", function (requi
             },
 
             // Flow 5 — Fill in the Actual Date Start/End on the Details lines.
+            // 14.0 list cells carry NO `name` attribute until the row is
+            // activated into edit mode (only <th> headers have
+            // data-name) — click any cell of the row first, matching
+            // patterns.md §C ("...SO/2026/001) .o_data_cell:first").
             {
                 content: "Open the first detail line for editing",
                 trigger:
-                    ".o_field_x2many[name='detail_ids'] .o_data_row:first .o_data_cell[name='actual_date_start']",
+                    ".o_field_x2many[name='detail_ids'] .o_data_row:first .o_data_cell:first",
             },
             {
                 content: "Fill in Actual Date Start",

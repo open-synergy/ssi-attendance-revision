@@ -46,30 +46,46 @@ class TestUiAttendanceRevision(HttpSavepointCase):
 
         # Used by the create tour: an employee with an open timesheet that
         # already has computed Attendance Schedules, so the Reload from
-        # Timesheet inline action has data to pull in.
+        # Timesheet inline action has data to pull in. The timesheet gets
+        # an explicit manual document number (instead of the default "/")
+        # so the create tour can pick it from the many2one dropdown by
+        # typing a unique, stable string — relying on domain uniqueness
+        # plus a blind click on the first autocomplete result is unsafe:
+        # a race between the employee_id onchange (which recomputes
+        # allowed_timesheet_ids) and opening the dropdown can leave the
+        # search text/result stale, and an untargeted click can land on
+        # the "Create ..." quick-create option instead of the real record.
         cls.employee_create = cls._create_employee("TOUR AR Employee Create")
-        cls.timesheet_create = cls._create_timesheet(cls.employee_create)
+        cls.timesheet_create = cls._create_timesheet(
+            cls.employee_create, "TOUR-AR-TS-CREATE"
+        )
 
         cls.employee_edit = cls._create_employee("TOUR AR Employee Edit")
-        cls.timesheet_edit = cls._create_timesheet(cls.employee_edit)
+        cls.timesheet_edit = cls._create_timesheet(cls.employee_edit, "TOUR-AR-TS-EDIT")
         cls.rec_edit = cls._create_revision(
             cls.employee_edit, cls.timesheet_edit, "TOUR-AR-EDIT"
         )
 
         cls.employee_delete = cls._create_employee("TOUR AR Employee Delete")
-        cls.timesheet_delete = cls._create_timesheet(cls.employee_delete)
+        cls.timesheet_delete = cls._create_timesheet(
+            cls.employee_delete, "TOUR-AR-TS-DELETE"
+        )
         cls.rec_delete = cls._create_revision(
             cls.employee_delete, cls.timesheet_delete, "TOUR-AR-DELETE"
         )
 
         cls.employee_confirm = cls._create_employee("TOUR AR Employee Confirm")
-        cls.timesheet_confirm = cls._create_timesheet(cls.employee_confirm)
+        cls.timesheet_confirm = cls._create_timesheet(
+            cls.employee_confirm, "TOUR-AR-TS-CONFIRM"
+        )
         cls.rec_confirm = cls._create_revision(
             cls.employee_confirm, cls.timesheet_confirm, "TOUR-AR-CONFIRM"
         )
 
         cls.employee_approve = cls._create_employee("TOUR AR Employee Approve")
-        cls.timesheet_approve = cls._create_timesheet(cls.employee_approve)
+        cls.timesheet_approve = cls._create_timesheet(
+            cls.employee_approve, "TOUR-AR-TS-APPROVE"
+        )
         cls.rec_approve = cls._create_revision(
             cls.employee_approve, cls.timesheet_approve, "TOUR-AR-APPROVE"
         )
@@ -77,7 +93,9 @@ class TestUiAttendanceRevision(HttpSavepointCase):
         cls.rec_approve.invalidate_cache()
 
         cls.employee_reject = cls._create_employee("TOUR AR Employee Reject")
-        cls.timesheet_reject = cls._create_timesheet(cls.employee_reject)
+        cls.timesheet_reject = cls._create_timesheet(
+            cls.employee_reject, "TOUR-AR-TS-REJECT"
+        )
         cls.rec_reject = cls._create_revision(
             cls.employee_reject, cls.timesheet_reject, "TOUR-AR-REJECT"
         )
@@ -85,7 +103,9 @@ class TestUiAttendanceRevision(HttpSavepointCase):
         cls.rec_reject.invalidate_cache()
 
         cls.employee_cancel = cls._create_employee("TOUR AR Employee Cancel")
-        cls.timesheet_cancel = cls._create_timesheet(cls.employee_cancel)
+        cls.timesheet_cancel = cls._create_timesheet(
+            cls.employee_cancel, "TOUR-AR-TS-CANCEL"
+        )
         cls.rec_cancel = cls._create_revision(
             cls.employee_cancel, cls.timesheet_cancel, "TOUR-AR-CANCEL"
         )
@@ -99,7 +119,9 @@ class TestUiAttendanceRevision(HttpSavepointCase):
         )
 
         cls.employee_restart = cls._create_employee("TOUR AR Employee Restart")
-        cls.timesheet_restart = cls._create_timesheet(cls.employee_restart)
+        cls.timesheet_restart = cls._create_timesheet(
+            cls.employee_restart, "TOUR-AR-TS-RESTART"
+        )
         cls.rec_restart = cls._create_revision(
             cls.employee_restart, cls.timesheet_restart, "TOUR-AR-RESTART"
         )
@@ -120,16 +142,19 @@ class TestUiAttendanceRevision(HttpSavepointCase):
         return cls.env["hr.employee"].create({"name": name})
 
     @classmethod
-    def _create_timesheet(cls, employee):
+    def _create_timesheet(cls, employee, name):
         """Create, open, and compute schedules for one ``hr.timesheet``.
 
         :param employee: the ``hr.employee`` the timesheet belongs to
+        :param name: manual document number, also used by the create tour
+            to locate this record in the ``# Timesheet`` many2one dropdown
         :return: the created ``hr.timesheet`` record, in state Open, with
             its Attendance Schedules already computed from the calendar
         :rtype: :class:`HrTimesheet`
         """
         timesheet = cls.env["hr.timesheet"].create(
             {
+                "name": name,
                 "employee_id": employee.id,
                 "date_start": "2026-01-01",
                 "date_end": "2026-01-31",
