@@ -160,12 +160,14 @@ msgid "Attachment Count"
 msgstr ""
 
 #. module: ssi_attendance_revission
+#: code:addons/ssi_attendance_revission/models/hr_timesheet.py:0
 #: model:ir.actions.act_window,name:ssi_attendance_revission.attendance_revision_action
 #: model:ir.model,name:ssi_attendance_revission.model_attendance_revision
 #: model:ir.module.category,name:ssi_attendance_revission.attendance_revision_data_ownership_module_category
 #: model:ir.module.category,name:ssi_attendance_revission.attendance_revision_workflow_module_category
 #: model:ir.ui.menu,name:ssi_attendance_revission.attendance_revision_menu
 #: model:ir.ui.menu,name:ssi_attendance_revission.menu_attendance_revision_configuration
+#, python-format
 msgid "Attendance Revision"
 msgstr ""
 
@@ -350,6 +352,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_attendance_revission.field_attendance_revision_detail__display_name
 #: model:ir.model.fields,field_description:ssi_attendance_revission.field_attendance_revision_reason__display_name
 #: model:ir.model.fields,field_description:ssi_attendance_revission.field_attendance_revision_type__display_name
+#: model:ir.model.fields,field_description:ssi_attendance_revission.field_hr_timesheet__display_name
 #: model:ir.model.fields,field_description:ssi_attendance_revission.field_hr_timesheet_attendance_schedule__display_name
 msgid "Display Name"
 msgstr ""
@@ -424,6 +427,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_attendance_revission.field_attendance_revision_detail__id
 #: model:ir.model.fields,field_description:ssi_attendance_revission.field_attendance_revision_reason__id
 #: model:ir.model.fields,field_description:ssi_attendance_revission.field_attendance_revision_type__id
+#: model:ir.model.fields,field_description:ssi_attendance_revission.field_hr_timesheet__id
 #: model:ir.model.fields,field_description:ssi_attendance_revission.field_hr_timesheet_attendance_schedule__id
 msgid "ID"
 msgstr ""
@@ -476,6 +480,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:ssi_attendance_revission.field_attendance_revision_detail____last_update
 #: model:ir.model.fields,field_description:ssi_attendance_revission.field_attendance_revision_reason____last_update
 #: model:ir.model.fields,field_description:ssi_attendance_revission.field_attendance_revision_type____last_update
+#: model:ir.model.fields,field_description:ssi_attendance_revission.field_hr_timesheet____last_update
 #: model:ir.model.fields,field_description:ssi_attendance_revission.field_hr_timesheet_attendance_schedule____last_update
 msgid "Last Modified on"
 msgstr ""
@@ -912,6 +917,7 @@ msgid ""
 msgstr ""
 
 #. module: ssi_attendance_revission
+#: model:ir.model,name:ssi_attendance_revission.model_hr_timesheet
 #: model_terms:ir.ui.view,arch_db:ssi_attendance_revission.attendance_revision_view_search
 msgid "Timesheet"
 msgstr ""
