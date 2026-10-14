@@ -104,3 +104,229 @@ scenarios:
           state:
             type: "value"
             expected: "done"
+
+  - name:
+      "Attendance Revision - Create Schedules is refused when a revision uses the slots"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Rebuild"
+
+      - step: "Create hr.timesheet in draft"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          date_start: "2024-01-01"
+          date_end: "2024-01-07"
+          working_schedule_id: "REF: resource.resource_calendar_std"
+
+      - step: "Open the timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+
+      - step: "Create the schedules"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+
+      - step: "Create attendance revision type"
+        action: "create"
+        model: "attendance_revision_type"
+        save_as: "revision_type"
+        values:
+          name: "Test Type Rebuild"
+          code: "TTRB001"
+          reason_selection_method: "domain"
+          reason_domain: "[]"
+
+      - step: "Create attendance revision"
+        action: "create"
+        model: "attendance_revision"
+        save_as: "revision"
+        values:
+          employee_id: "REC: employee.id"
+          type_id: "REC: revision_type.id"
+          timesheet_id: "REC: timesheet.id"
+          date: "2024-01-03"
+
+      - step: "Load the schedule slots into the revision"
+        action: "call"
+        target: "revision"
+        method: "action_reload_schedule"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+
+      - step: "Create Schedules is refused and names the revision"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+        expect_error:
+          type: "UserError"
+          message_contains: "Attendance Revision"
+
+  - name: "Attendance Revision - Create Schedules works without a revision"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Plain"
+
+      - step: "Create hr.timesheet in draft"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          date_start: "2024-01-01"
+          date_end: "2024-01-07"
+          working_schedule_id: "REF: resource.resource_calendar_std"
+
+      - step: "Open the timesheet"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+
+      - step: "Create the schedules"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+
+      - step: "Assert schedules are created"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain:
+          - ["sheet_id", "=", "REC: timesheet.id"]
+        save_as: "slots"
+        limit: 1
+        expect_count: 1
+
+  - name:
+      "Attendance Revision - Revision of another timesheet does not block Create
+      Schedules"
+    steps:
+      - step: "Create employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "employee"
+        values:
+          name: "Test Employee Own"
+
+      - step: "Create other employee"
+        action: "create"
+        model: "hr.employee"
+        save_as: "other_employee"
+        values:
+          name: "Test Employee Other"
+
+      - step: "Create hr.timesheet of the employee"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "timesheet"
+        values:
+          employee_id: "REC: employee.id"
+          date_start: "2024-01-01"
+          date_end: "2024-01-07"
+          working_schedule_id: "REF: resource.resource_calendar_std"
+
+      - step: "Create hr.timesheet of the other employee"
+        action: "create"
+        model: "hr.timesheet"
+        save_as: "other_timesheet"
+        values:
+          employee_id: "REC: other_employee.id"
+          date_start: "2024-01-01"
+          date_end: "2024-01-07"
+          working_schedule_id: "REF: resource.resource_calendar_std"
+
+      - step: "Open the timesheet of the employee"
+        action: "call"
+        target: "timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+
+      - step: "Open the timesheet of the other employee"
+        action: "call"
+        target: "other_timesheet"
+        method: "action_open"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+
+      - step: "Create the schedules of the other employee"
+        action: "call"
+        target: "other_timesheet"
+        method: "action_compute_schedule"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+
+      - step: "Create attendance revision type"
+        action: "create"
+        model: "attendance_revision_type"
+        save_as: "revision_type"
+        values:
+          name: "Test Type Other"
+          code: "TTOT001"
+          reason_selection_method: "domain"
+          reason_domain: "[]"
+
+      - step: "Create attendance revision of the other employee"
+        action: "create"
+        model: "attendance_revision"
+        save_as: "revision"
+        values:
+          employee_id: "REC: other_employee.id"
+          type_id: "REC: revision_type.id"
+          timesheet_id: "REC: other_timesheet.id"
+          date: "2024-01-03"
+
+      - step: "Load the schedule slots into the other revision"
+        action: "call"
+        target: "revision"
+        method: "action_reload_schedule"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+
+      - step: "Create Schedules of the employee is not blocked"
+        action: "call"
+        target: "timesheet"
+        method: "action_compute_schedule"
+        as_user: "base.user_admin"
+        context:
+          bypass_policy_check: true
+
+      - step: "Assert schedules are created"
+        action: "search"
+        model: "hr.timesheet_attendance_schedule"
+        domain:
+          - ["sheet_id", "=", "REC: timesheet.id"]
+        save_as: "slots"
+        limit: 1
+        expect_count: 1

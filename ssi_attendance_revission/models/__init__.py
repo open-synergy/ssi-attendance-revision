@@ -7,5 +7,6 @@ from . import (  # noqa: F401
     attendance_revision_reason,
     attendance_revision_type,
     attendance_revision,
+    hr_timesheet,
     hr_timesheet_attendance_schedule,
 )
